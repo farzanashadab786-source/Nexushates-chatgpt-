@@ -5,19 +5,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Gemini Ultra</title>
+<title>Nexus AI</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <style>
-html,body{height:100%}
 
-.chat-scroll{scroll-behavior:smooth}
+html,body{
+height:100%;
+}
 
 .typing::after{
 content:"▋";
-animation:blink 1s infinite
+animation:blink 1s infinite;
 }
 
 @keyframes blink{
@@ -26,53 +27,54 @@ animation:blink 1s infinite
 100%{opacity:0}
 }
 
+pre{
+background:#0f172a;
+color:#e5e7eb;
+padding:14px;
+border-radius:10px;
+overflow:auto;
+}
+
 code{
-background:#111;
+background:#1e293b;
 padding:4px 6px;
 border-radius:6px;
 }
 
-pre{
-background:#111;
-padding:12px;
-border-radius:10px;
-overflow:auto;
-}
 </style>
 
 </head>
 
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
+<body class="bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-gray-200">
 
-<div id="loading" class="fixed inset-0 flex items-center justify-center text-xl bg-white dark:bg-gray-900 z-50">
-Loading Gemini Ultra...
+<div id="loading"
+class="fixed inset-0 flex items-center justify-center text-xl bg-white dark:bg-gray-950 z-50">
+Loading Nexus...
 </div>
 
 <div id="app" class="hidden min-h-screen flex">
 
+<div id="overlay"
+class="fixed inset-0 bg-black/40 hidden z-30"></div>
+
 <!-- SIDEBAR -->
 
 <div id="sidebar"
-class="fixed md:relative z-40 w-72 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-full transform -translate-x-full md:translate-x-0 transition-transform">
+class="fixed md:relative z-40 w-72 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 h-full transform -translate-x-full md:translate-x-0 transition-transform">
 
-<div class="p-4 border-b flex justify-between">
+<div class="p-4 border-b dark:border-gray-800 flex justify-between">
 
-<span class="font-bold">Gemini Ultra</span>
+<span class="font-bold text-lg">⚡ Nexus</span>
 
-<button id="newChat" class="text-blue-500">New</button>
-
-</div>
-
-<div id="chatList" class="overflow-y-auto h-full pb-20"></div>
-
-<div class="p-3 border-t dark:border-gray-700">
-
-<button id="exportChats"
-class="text-sm text-blue-500">
-Export Chats
+<button id="newChat"
+class="text-blue-500">
+New
 </button>
 
 </div>
+
+<div id="chatList"
+class="overflow-y-auto h-full pb-20"></div>
 
 </div>
 
@@ -80,45 +82,59 @@ Export Chats
 
 <div class="flex flex-col flex-1 min-h-screen">
 
-<!-- TOPBAR -->
+<!-- TOP BAR -->
 
-<div class="flex items-center justify-between p-3 border-b dark:border-gray-700 bg-white dark:bg-gray-800">
+<div
+class="flex items-center justify-between p-3 border-b dark:border-gray-800 bg-white dark:bg-gray-900">
 
-<div class="flex gap-3 items-center">
+<div class="flex items-center gap-3">
 
-<button id="menuBtn" class="md:hidden text-xl">☰</button>
+<button id="menuBtn"
+class="md:hidden text-xl">
+☰
+</button>
 
-<h1 class="font-semibold">AI Chat</h1>
+<h1 class="font-semibold">
+Nexus
+</h1>
 
 </div>
 
 <div class="flex gap-3">
 
-<button id="darkToggle">🌙</button>
-<button id="settingsBtn">⚙</button>
+<button id="darkToggle">
+🌙
+</button>
+
+<button id="settingsBtn">
+⚙
+</button>
 
 </div>
 
 </div>
 
-<!-- CHAT -->
+<!-- CHAT AREA -->
 
 <div id="chatArea"
-class="flex-1 overflow-y-auto chat-scroll p-4 space-y-4"></div>
+class="flex-1 overflow-y-auto px-4 pt-10 pb-28 space-y-6"></div>
 
 <!-- INPUT -->
 
-<div class="sticky bottom-0 bg-white dark:bg-gray-800 border-t dark:border-gray-700 p-3">
+<div
+class="fixed bottom-0 left-0 md:left-72 right-0 bg-white dark:bg-gray-900 border-t dark:border-gray-800 p-3">
 
-<div class="flex gap-2">
+<div class="max-w-3xl mx-auto flex gap-2">
 
-<textarea id="messageInput"
+<textarea
+id="messageInput"
 rows="1"
-placeholder="Ask anything..."
-class="flex-1 resize-none p-2 border rounded dark:bg-gray-900"></textarea>
+placeholder="Ask Nexus..."
+class="flex-1 resize-none p-3 border rounded-lg dark:bg-gray-950"></textarea>
 
-<button id="sendBtn"
-class="bg-blue-500 text-white px-4 rounded">
+<button
+id="sendBtn"
+class="bg-blue-500 hover:bg-blue-600 text-white px-5 rounded-lg">
 Send
 </button>
 
@@ -127,6 +143,7 @@ Send
 </div>
 
 </div>
+
 </div>
 
 <!-- SETTINGS -->
@@ -134,31 +151,39 @@ Send
 <div id="settingsModal"
 class="fixed inset-0 hidden items-center justify-center bg-black/50">
 
-<div class="bg-white dark:bg-gray-800 p-6 rounded w-96 space-y-4">
+<div
+class="bg-white dark:bg-gray-900 p-6 rounded-xl w-96 space-y-4">
 
-<h2 class="font-bold text-lg">Settings</h2>
+<h2 class="font-bold text-lg">
+Settings
+</h2>
 
-<input id="apiKeyInput"
+<input
+id="apiKeyInput"
 type="password"
 placeholder="OpenRouter API Key"
-class="w-full p-2 border rounded dark:bg-gray-900">
+class="w-full p-2 border rounded dark:bg-gray-950">
 
-<input id="modelInput"
+<input
+id="modelInput"
 type="text"
-class="w-full p-2 border rounded dark:bg-gray-900">
+class="w-full p-2 border rounded dark:bg-gray-950">
 
-<textarea id="systemPromptInput"
+<textarea
+id="systemPromptInput"
 placeholder="System Prompt"
-class="w-full p-2 border rounded dark:bg-gray-900"></textarea>
+class="w-full p-2 border rounded dark:bg-gray-950"></textarea>
 
 <div class="flex justify-end gap-2">
 
-<button id="saveSettings"
+<button
+id="saveSettings"
 class="bg-blue-500 text-white px-3 py-1 rounded">
 Save
 </button>
 
-<button id="closeSettings"
+<button
+id="closeSettings"
 class="border px-3 py-1 rounded">
 Close
 </button>
@@ -170,6 +195,11 @@ Close
 </div>
 
 <script>
+
+marked.setOptions({
+breaks:true,
+gfm:true
+})
 
 const loading=document.getElementById("loading")
 const app=document.getElementById("app")
@@ -223,7 +253,7 @@ chats.forEach(chat=>{
 
 const div=document.createElement("div")
 
-div.className="p-3 border-b cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+div.className="p-3 border-b cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
 
 div.innerHTML=`
 <div class="flex justify-between">
@@ -236,6 +266,7 @@ div.onclick=()=>{
 
 currentChatId=chat.id
 renderMessages()
+closeSidebar()
 
 }
 
@@ -268,16 +299,24 @@ addMessage(m.role,m.content,false)
 
 })
 
+scrollBottom()
+
+}
+
+function scrollBottom(){
+
+chatArea.scrollTop=chatArea.scrollHeight
+
 }
 
 function addMessage(role,content,scroll=true){
 
 const div=document.createElement("div")
 
-div.className=`max-w-xl p-3 rounded ${
+div.className=`max-w-2xl p-4 rounded-xl shadow ${
 role==="user"
 ?"ml-auto bg-blue-500 text-white"
-:"bg-gray-200 dark:bg-gray-700"
+:"bg-white dark:bg-gray-900 border dark:border-gray-800"
 }`
 
 div.innerHTML=marked.parse(content)
@@ -287,7 +326,7 @@ chatArea.appendChild(div)
 addCopyButtons()
 
 if(scroll){
-chatArea.scrollTop=chatArea.scrollHeight
+scrollBottom()
 }
 
 return div
@@ -302,13 +341,12 @@ if(pre.querySelector("button"))return
 
 const btn=document.createElement("button")
 
-btn.textContent="Copy"
+btn.textContent="copy"
+
 btn.className="text-xs float-right mb-2 bg-gray-700 text-white px-2 rounded"
 
 btn.onclick=()=>{
-
 navigator.clipboard.writeText(pre.innerText)
-
 }
 
 pre.prepend(btn)
@@ -384,10 +422,8 @@ const token=json.choices?.[0]?.delta?.content
 if(token){
 
 aiText+=token
-
 aiDiv.innerHTML=marked.parse(aiText)
-
-chatArea.scrollTop=chatArea.scrollHeight
+scrollBottom()
 
 }
 
@@ -401,12 +437,7 @@ aiDiv.classList.remove("typing")
 
 chat.messages.push({role:"assistant",content:aiText})
 
-if(chat.messages.length===2){
-chat.title=text.slice(0,30)
-}
-
 save()
-renderChats()
 
 }catch(e){
 
@@ -419,52 +450,50 @@ aiDiv.innerHTML="Error: "+e.message
 document.getElementById("sendBtn").onclick=sendMessage
 
 input.addEventListener("keydown",e=>{
-
 if(e.key==="Enter"&&!e.shiftKey){
 e.preventDefault()
 sendMessage()
 }
-
 })
 
-document.getElementById("menuBtn").onclick=()=>{
+const sidebar=document.getElementById("sidebar")
+const overlay=document.getElementById("overlay")
 
-document
-.getElementById("sidebar")
-.classList.toggle("-translate-x-full")
-
+function closeSidebar(){
+sidebar.classList.add("-translate-x-full")
+overlay.classList.add("hidden")
 }
 
+document.getElementById("menuBtn").onclick=()=>{
+sidebar.classList.toggle("-translate-x-full")
+overlay.classList.toggle("hidden")
+}
+
+overlay.onclick=closeSidebar
+
 document.getElementById("darkToggle").onclick=()=>{
-
 document.documentElement.classList.toggle("dark")
-
 localStorage.setItem(
 "dark",
 document.documentElement.classList.contains("dark")
 )
-
 }
 
 document.getElementById("settingsBtn").onclick=()=>{
-
-document.getElementById("settingsModal").classList.remove("hidden")
-document.getElementById("settingsModal").classList.add("flex")
+const m=document.getElementById("settingsModal")
+m.classList.remove("hidden")
+m.classList.add("flex")
 
 document.getElementById("apiKeyInput").value=apiKey
 document.getElementById("modelInput").value=model
 document.getElementById("systemPromptInput").value=systemPrompt
-
 }
 
 document.getElementById("closeSettings").onclick=()=>{
-
 document.getElementById("settingsModal").classList.add("hidden")
-
 }
 
 document.getElementById("saveSettings").onclick=()=>{
-
 apiKey=document.getElementById("apiKeyInput").value
 model=document.getElementById("modelInput").value
 systemPrompt=document.getElementById("systemPromptInput").value
@@ -474,26 +503,9 @@ localStorage.setItem("model",model)
 localStorage.setItem("systemPrompt",systemPrompt)
 
 document.getElementById("settingsModal").classList.add("hidden")
-
 }
 
 document.getElementById("newChat").onclick=newChat
-
-document.getElementById("exportChats").onclick=()=>{
-
-const data=JSON.stringify(chats,null,2)
-
-const blob=new Blob([data])
-
-const url=URL.createObjectURL(blob)
-
-const a=document.createElement("a")
-
-a.href=url
-a.download="chats.json"
-a.click()
-
-}
 
 if(chats.length===0){
 newChat()
@@ -510,4 +522,4 @@ app.classList.remove("hidden")
 </script>
 
 </body>
-</html>
+  </html>
